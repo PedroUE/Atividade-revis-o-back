@@ -38,9 +38,18 @@ export const create = async (req, res) => {
         })
         if (available == undefined)
 
-            return res.status(400).json({ error: `E obrigatório a Disponibilidade` })
+            return res.status(400).json({ error: `E obrigatório a Disponibilidade` });
 
-        const food = await foodModel.create({
+            const ParsePrice = parseInt (price);
+            if (isNaN(ParsePrice)) {
+                return res.status(400).json({ error: 'O preço (price) deve ser um número válido!'});
+            }
+
+            if (ParsePrice < 0) {
+                return res.status(400).json({ error: 'O preço (price) deve ser um número positivo!'});
+            }
+
+        const data = await foodModel.create({
             name,
             description,
             price: parseInt(price),
@@ -50,7 +59,7 @@ export const create = async (req, res) => {
 
         res.status(201).json({
             message: 'Comida cadastrada com sucesso!',
-            food,
+            data,
         });
     } catch (error) {
         console.error('Erro ao criar:', error);
