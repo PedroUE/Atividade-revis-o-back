@@ -75,11 +75,11 @@ export const getById = async (req, res) => {
             return res.status(400).json({ error: 'O ID enviado não é um número válido.' });
         }
 
-        const data = await model.findById(id);
+        const data = await foodModel.findById(id);
         if (!data) {
             return res.status(404).json({ error: 'Registro não encontrado.' });
         }
-        res.json({ food });
+        res.json({ data });
     } catch (error) {
         console.error('Erro ao buscar:', error);
         res.status(500).json({ error: 'Erro ao buscar comida' });
@@ -98,12 +98,12 @@ export const update = async (req, res) => {
 
         if (isNaN(id)) return res.status(400).json({ error: 'ID inválido.' });
 
-        const existe = await model.findById(id);
+        const existe = await foodModel.findById(id);
         if (!existe) {
             return res.status(404).json({ error: 'Registro não encontrado para atualizar.' });
         }
 
-        const data = await model.update(id, req.body);
+        const data = await foodModel.update(id, req.body);
         res.json({
             message: `O registro "${data.name}" foi atualizado com sucesso!`,
             data,
@@ -120,12 +120,12 @@ export const remove = async (req, res) => {
 
         if (isNaN(id)) return res.status(400).json({ error: 'ID inválido.' });
 
-        const comidaExiste = await model.findById(id);
+        const comidaExiste = await foodModel.findById(id);
         if (!comidaExiste) {
             return res.status(404).json({ error: 'Comida não encontrada para deletar.' });
         }
 
-        await model.remove(id);
+        await foodModel.remove(id);
         res.json({
             message: `O registro "${comidaExiste.name}" foi deletado com sucesso!`,
             deletado: comidaExiste,
